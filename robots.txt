@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /private
+Disallow: /api
+
+Sitemap: https://platform.zooka-ai.com/sitemap.xml
+Host: https://platform.zooka-ai.com
