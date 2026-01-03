@@ -1,9 +1,9 @@
 {
-  "name": "Integrated SEO Automation Building Platform",
-  "description": "An all-in-one application demonstrating the power and versatility of the Gemini API, including advanced chat, image and video generation, real-time voice conversations, grounded search, and more.",
   "requestFramePermissions": [
+    "camera",
     "microphone",
-    "geolocation",
-    "camera"
-  ]
+    "geolocation"
+  ],
+  "name": "ZOOKA OS V7.8 | INFINITY SOVEREIGN",
+  "description": ""
 }

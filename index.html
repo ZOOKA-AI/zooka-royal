@@ -1,72 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>ZOOKA OS | INFINITY SOVEREIGN</title>
     
-    <!-- ✅ SEO: Canonical & Meta -->
-    <title>نظام زوكا | ZOOKA OS - Platform</title>
-    <meta name="description" content="منصة زوكا (ZOOKA OS) لإدارة العمليات الرقمية، الأتمتة، وتوليد المحتوى بالذكاء الاصطناعي. منصة سحابية متكاملة.">
-    <link rel="canonical" href="https://platform.zooka-ai.com/" />
-    <meta property="og:title" content="ZOOKA OS - AI Automation Platform" />
-    <meta property="og:description" content="الذكاء المركزي لإدارة الشركات والأساطيل." />
-    <meta property="og:url" content="https://platform.zooka-ai.com/" />
-    <meta property="og:type" content="website" />
-    
-    <!-- ✅ PWA: Manifest & Theme -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#111827">
-    <link rel="apple-touch-icon" href="/vite.svg">
-
-    <!-- ✅ SEO: Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ZOOKA OS",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "99.00",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1250"
-      }
-    }
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ['Cairo', 'sans-serif'],
-              mono: ['Courier New', 'monospace'],
+            fontFamily: { 
+              sans: ['Cairo', 'sans-serif'], 
+              mono: ['JetBrains Mono', 'monospace'] 
             },
             animation: {
-              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'spin-slow': 'spin 3s linear infinite',
-              'float': 'float 3s ease-in-out infinite',
-              'scan': 'scan 2s linear infinite',
+              'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 15s linear infinite',
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'fade-in-up': 'fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'blob': 'blob 10s infinite',
             },
             keyframes: {
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
-              },
-              scan: {
-                '0%': { transform: 'translateY(0)', opacity: '0' },
-                '50%': { opacity: '1' },
-                '100%': { transform: 'translateY(100%)', opacity: '0' },
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+              blob: {
+                '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                '100%': { transform: 'translate(0px, 0px) scale(1)' },
               }
             }
           },
@@ -74,53 +41,54 @@
       }
     </script>
     <style>
-      /* Cyberpunk Scrollbar */
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #0f172a; }
-      ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
-      
-      .neon-text {
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff;
+      :root {
+        --sat: env(safe-area-inset-top);
+        --sar: env(safe-area-inset-right);
+        --sab: env(safe-area-inset-bottom);
+        --sal: env(safe-area-inset-left);
       }
-      .grid-bg {
-        background-size: 40px 40px;
-        background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      body { 
+        background-color: #000; 
+        color: white; 
+        -webkit-font-smoothing: antialiased; 
+        overflow-x: hidden;
+        overscroll-behavior-y: none;
       }
+      .glass-header {
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.3); border-radius: 20px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(37, 99, 235, 0.6); }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react-window": "https://esm.sh/react-window@1.8.10",
-    "react-virtualized-auto-sizer": "https://esm.sh/react-virtualized-auto-sizer@1.0.24",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "@heroicons/react/": "https://esm.sh/@heroicons/react@^2.2.0/",
-    "vite": "https://esm.sh/vite@^7.2.7",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@0.2.1",
+    "@heroicons/react/24/outline": "https://esm.sh/@heroicons/react@2.1.1/24/outline",
+    "@heroicons/react/24/solid": "https://esm.sh/@heroicons/react@2.1.1/24/solid",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "@heroicons/react/": "https://esm.sh/@heroicons/react@2.1.1/",
+    "@/": "./",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "express": "https://esm.sh/express@^5.2.1",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4"
   }
 }
 </script>
-</head>
-  <body class="bg-gray-950 text-gray-100 font-sans overflow-hidden">
+  </head>
+  <body class="bg-black text-gray-100 font-sans">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
-    <!-- ✅ PWA Service Worker Registration -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js', { scope: '/' })
-            .then(registration => {
-              console.log('✅ ServiceWorker registered: ', registration.scope);
-            })
-            .catch(error => {
-              console.log('❌ ServiceWorker registration failed: ', error);
-            });
-        });
-      }
-    </script>
   </body>
 </html>

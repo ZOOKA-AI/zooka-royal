@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { ShieldCheckIcon, DocumentTextIcon, UserIcon } from '@heroicons/react/24/solid';
+import { ShieldCheckIcon, DocumentTextIcon, UserIcon, GlobeAltIcon, CheckBadgeIcon } from '@heroicons/react/24/solid';
 
 interface LegalProps {
     page: 'privacy' | 'terms' | 'about';
@@ -7,56 +8,78 @@ interface LegalProps {
 
 const Legal: React.FC<LegalProps> = ({ page }) => {
     return (
-        <div className="max-w-4xl mx-auto p-8 bg-gray-900 rounded-2xl border border-gray-700 min-h-screen text-gray-300 leading-relaxed">
+        <div className="max-w-4xl mx-auto p-10 bg-gray-900/60 backdrop-blur-xl rounded-[3rem] border border-gray-800 min-h-screen text-gray-300 leading-relaxed shadow-2xl font-sans" dir="rtl">
             {page === 'privacy' && (
-                <div>
-                    <h1 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                        <ShieldCheckIcon className="w-8 h-8 text-green-500" /> سياسة الخصوصية
+                <div className="animate-fade-in">
+                    <h1 className="text-4xl font-black text-white mb-10 flex items-center gap-4">
+                        <ShieldCheckIcon className="w-10 h-10 text-emerald-500" /> سياسة السيادة الرقمية
                     </h1>
-                    <p className="mb-4">نحن في نظام زوكا (ZOOKA OS) نولي خصوصيتك أهمية قصوى. هذه السياسة تشرح كيف نجمع ونستخدم بياناتك.</p>
-                    <h3 className="text-xl font-bold text-white mt-6 mb-2">1. جمع البيانات</h3>
-                    <p>نقوم بجمع البيانات الضرورية فقط لتشغيل النظام، مثل البريد الإلكتروني وسجلات الاستخدام التقنية.</p>
-                    <h3 className="text-xl font-bold text-white mt-6 mb-2">2. حماية المعلومات</h3>
-                    <p>نستخدم تقنيات تشفير متقدمة (Cyber Shield) لحماية بياناتك من الوصول غير المصرح به.</p>
+                    <div className="space-y-8">
+                        <section className="bg-black/20 p-6 rounded-2xl border border-gray-800">
+                            <h3 className="text-xl font-black text-white mb-3 flex items-center gap-2">1. حماية الهوية</h3>
+                            <p className="text-sm leading-loose">نظام ZOOKA OS يستخدم تشفيراً من نوع E2EE (End-to-End Encryption). جميع الأكواد السيادية والمفاتيح مخزنة في خزنة مشفرة محلياً على جهازك ولا تصل إلى خوادمنا بشكل خام.</p>
+                        </section>
+                        <section className="bg-black/20 p-6 rounded-2xl border border-gray-800">
+                            <h3 className="text-xl font-black text-white mb-3 flex items-center gap-2">2. معالجة البيانات</h3>
+                            <p className="text-sm leading-loose">تتم معالجة الطلبات عبر واجهات برمجة تطبيقات (APIs) مؤمنة بالكامل. لا نقوم بمشاركة بيانات مشاريعك أو مخططاتك الهندسية مع أطراف ثالثة لأغراض إعلانية.</p>
+                        </section>
+                        <section className="bg-black/20 p-6 rounded-2xl border border-gray-800">
+                            <h3 className="text-xl font-black text-white mb-3 flex items-center gap-2">3. الشفافية</h3>
+                            <p className="text-sm leading-loose">لك الحق الكامل في مسح كافة بياناتك بضغطة زر واحدة من إعدادات النظام، مما يؤدي إلى تدمير رقمي فوري لكافة السجلات المرتبطة بهويتك.</p>
+                        </section>
+                    </div>
                 </div>
             )}
 
             {page === 'terms' && (
-                <div>
-                    <h1 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                        <DocumentTextIcon className="w-8 h-8 text-blue-500" /> شروط الاستخدام
+                <div className="animate-fade-in">
+                    <h1 className="text-4xl font-black text-white mb-10 flex items-center gap-4">
+                        <DocumentTextIcon className="w-10 h-10 text-blue-500" /> ميثاق الاستخدام
                     </h1>
-                    <p className="mb-4">استخدامك لنظام زوكا يعني موافقتك الكاملة على هذه الشروط.</p>
-                    <ul className="list-disc list-inside space-y-3 mt-4">
-                        <li>يمنع استخدام النظام في أي أنشطة غير قانونية.</li>
-                        <li>حقوق الملكية الفكرية محفوظة للمالك (@3219).</li>
-                        <li>الاشتراكات المدفوعة تجدد تلقائياً ما لم يتم إلغاؤها.</li>
-                    </ul>
+                    <div className="prose prose-invert max-w-none space-y-6">
+                        <p className="font-bold text-lg">بمجرد تفعيل الكود السيادي، أنت تلتزم بالمعايير التالية:</p>
+                        <ul className="list-none space-y-4">
+                            <li className="bg-gray-800/40 p-5 rounded-2xl border-r-4 border-blue-600 flex items-center gap-4">
+                                <CheckBadgeIcon className="w-6 h-6 text-blue-500 shrink-0" />
+                                <span>الاستخدام القانوني والأخلاقي لأدوات الذكاء الاصطناعي.</span>
+                            </li>
+                            <li className="bg-gray-800/40 p-5 rounded-2xl border-r-4 border-blue-600 flex items-center gap-4">
+                                <CheckBadgeIcon className="w-6 h-6 text-blue-500 shrink-0" />
+                                <span>عدم محاولة الهندسة العكسية للنواة (ZH-Core).</span>
+                            </li>
+                            <li className="bg-gray-800/40 p-5 rounded-2xl border-r-4 border-blue-600 flex items-center gap-4">
+                                <CheckBadgeIcon className="w-6 h-6 text-blue-500 shrink-0" />
+                                <span>الحفاظ على سرية كود الدخول الخاص بك؛ المالك غير مسؤول عن تسريب الأكواد الشخصية.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             )}
 
             {page === 'about' && (
-                <div className="text-center">
-                    <div className="w-32 h-32 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_0_30px_rgba(124,58,237,0.5)]">
-                        <UserIcon className="w-16 h-16 text-white" />
+                <div className="text-center animate-fade-in">
+                    <div className="w-40 h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-[3rem] mx-auto mb-10 flex items-center justify-center shadow-2xl relative">
+                        <UserIcon className="w-20 h-20 text-white" />
+                        <div className="absolute -bottom-2 -right-2 bg-yellow-500 p-3 rounded-2xl shadow-xl">
+                            <GlobeAltIcon className="w-6 h-6 text-black animate-spin-slow" />
+                        </div>
                     </div>
-                    <h1 className="text-4xl font-bold text-white mb-4">من نحن؟</h1>
-                    <p className="text-lg max-w-2xl mx-auto">
-                        نحن فريق <strong>ZOOKA CORE</strong>، نسعى لتقديم حلول ذكاء اصطناعي متكاملة وآمنة. نظامنا مصمم ليكون حصناً رقمياً ومساعداً ذكياً في آن واحد.
+                    <h1 className="text-5xl font-black text-white mb-6 tracking-tighter">رويال هارون</h1>
+                    <p className="text-xl text-gray-400 max-w-2xl mx-auto font-bold leading-relaxed mb-12">
+                        نحن لسنا مجرد مطورين، نحن معماريو المستقبل الرقمي. نظام <strong>ZOOKA OS</strong> هو نتاج سنوات من البحث لدمج القوة الاستخباراتية مع البساطة التنفيذية.
                     </p>
-                    <div className="mt-10 grid grid-cols-3 gap-4 text-center">
-                        <div className="bg-gray-800 p-4 rounded-lg">
-                            <h4 className="font-bold text-white text-xl">100%</h4>
-                            <span className="text-xs text-gray-500">حماية</span>
-                        </div>
-                        <div className="bg-gray-800 p-4 rounded-lg">
-                            <h4 className="font-bold text-white text-xl">24/7</h4>
-                            <span className="text-xs text-gray-500">تواجد</span>
-                        </div>
-                        <div className="bg-gray-800 p-4 rounded-lg">
-                            <h4 className="font-bold text-white text-xl">∞</h4>
-                            <span className="text-xs text-gray-500">تطوير</span>
-                        </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {[
+                            { label: 'دقة المعالجة', val: '99.9%' },
+                            { label: 'أمان النواة', val: 'Military' },
+                            { label: 'تحديثات حية', val: 'Real-time' },
+                            { label: 'دعم سيادي', val: 'Global' }
+                        ].map((s, i) => (
+                            <div key={i} className="bg-gray-800/40 p-6 rounded-3xl border border-gray-700">
+                                <div className="text-2xl font-black text-white mb-1">{s.val}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-widest font-black">{s.label}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

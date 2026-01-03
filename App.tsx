@@ -1,119 +1,136 @@
-import React, { useState, useCallback } from 'react';
-import { Sidebar } from './components/Sidebar';
+
+import React, { useState, useCallback, useEffect } from 'react';
+import { Sidebar } from './Sidebar'; 
 import Chatbot from './features/Chatbot';
 import ImageSuite from './features/ImageSuite';
-import TextPlayground from './features/TextPlayground';
 import { Welcome } from './features/Welcome';
 import { Feature, UserRole } from './types';
-import { ApiKeyManager } from './components/ApiKeyManager';
 import VideoSuite from './features/VideoSuite';
-import AudioSuite from './features/AudioSuite';
-import GroundedSearch from './features/GroundedSearch';
-import MediaAnalyzer from './features/MediaAnalyzer';
-import AppBuilder from './features/AppBuilder';
 import SmartEditor from './features/SmartEditor';
-import AgentCenter from './features/AgentCenter';
 import MarketingMaestro from './features/MarketingMaestro';
-import GeoCommander from './features/GeoCommander';
-import SystemCore from './features/SystemCore';
-import CloudManager from './features/CloudManager';
-import VisionArchitect from './features/VisionArchitect';
-import GlobalConnect from './features/GlobalConnect';
+import GeoCommander from './GeoCommander';
+import Settings from './features/Settings';
 import QuranSuite from './features/QuranSuite';
 import FinanceManager from './features/FinanceManager';
-import Settings from './features/Settings';
-import AdNetwork from './features/AdNetwork';
-import Legal from './features/Legal';
-import { Auth } from './features/Auth';
+import AppBuilder from './features/AppBuilder';
+import SelfPromotionProtocol from './features/SelfPromotionProtocol';
+import GlobalAIHub from './features/GlobalAIHub';
+import AdminDashboard from './features/AdminDashboard';
+import { LandingPage } from './LandingPage';
+import { Bars3Icon, XMarkIcon, ShieldCheckIcon, SignalIcon } from '@heroicons/react/24/outline';
 
 const App: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState<Feature | null>(null);
-  const [intendedFeature, setIntendedFeature] = useState<Feature | null>(null);
-  const [isApiKeyNeeded, setIsApiKeyNeeded] = useState(false);
-  const [apiKeyReady, setApiKeyReady] = useState(false);
-  
-  // Auth State
-  const [userRole, setUserRole] = useState<UserRole>('guest'); // guest, user, owner
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userRole, setUserRole] = useState<UserRole>('guest'); 
+
+  useEffect(() => {
+    const savedRole = localStorage.getItem('zooka_user_role') as UserRole;
+    if (savedRole && savedRole !== 'guest') setUserRole(savedRole);
+  }, []);
 
   const handleLogin = (role: 'user' | 'owner') => {
     setUserRole(role);
+    localStorage.setItem('zooka_user_role', role);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('zooka_user_role');
+    setUserRole('guest');
+    setActiveFeature(null);
+    setIsMobileMenuOpen(false);
   };
 
   const handleSelectFeature = useCallback((feature: Feature) => {
-    // Special Pages Routing
     if (feature.id === 'logout') {
-      setUserRole('guest');
-      setActiveFeature(null);
+      handleLogout();
       return;
     }
-
-    // These features require a paid API key
-    const needsKey = ['image-suite', 'video-suite', 'marketing-maestro', 'geo-commander', 'cloud-manager', 'vision-architect', 'global-connect', 'quran-suite', 'finance-manager'].includes(feature.id);
+    setActiveFeature(feature);
+    setIsMobileMenuOpen(false);
     
-    setIsApiKeyNeeded(needsKey);
-    if (needsKey && !apiKeyReady) {
-      setIntendedFeature(feature);
-      setActiveFeature(null);
-    } else {
-      setActiveFeature(feature);
-      setIntendedFeature(null);
-    }
-  }, [apiKeyReady]);
+    const mainEl = document.getElementById('main-scroll-container');
+    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   
-  // If not logged in, show Auth Screen
-  if (userRole === 'guest') {
-    return <Auth onLogin={handleLogin} />;
-  }
+  if (userRole === 'guest') return <LandingPage onLogin={handleLogin} />;
 
   const renderFeature = () => {
-    if (isApiKeyNeeded && !apiKeyReady) {
-       return <ApiKeyManager onKeyReady={() => {
-         setApiKeyReady(true);
-         if (intendedFeature) handleSelectFeature(intendedFeature);
-       }} />;
-    }
-
     if (!activeFeature) return <Welcome />;
-
     switch (activeFeature.id) {
-      // --- NEW PAGES ---
+      case 'admin-dashboard': return <AdminDashboard />;
       case 'settings': return <Settings role={userRole} />;
-      case 'ads': return <AdNetwork />;
-      case 'privacy': return <Legal page="privacy" />;
-      case 'terms': return <Legal page="terms" />;
-      case 'about': return <Legal page="about" />;
-      
-      // --- EXISTING FEATURES ---
-      case 'finance-manager': return <FinanceManager />;
-      case 'quran-suite': return <QuranSuite />;
-      case 'global-connect': return <GlobalConnect />;
-      case 'vision-architect': return <VisionArchitect />;
-      case 'system-core': return <SystemCore />;
-      case 'cloud-manager': return <CloudManager />;
-      case 'chatbot': return <Chatbot />;
-      case 'marketing-maestro': return <MarketingMaestro />;
-      case 'geo-commander': return <GeoCommander />;
-      case 'agent-center': return <AgentCenter />;
-      case 'smart-editor': return <SmartEditor />;
-      case 'text-playground': return <TextPlayground />;
-      case 'app-builder': return <AppBuilder />;
       case 'image-suite': return <ImageSuite />;
       case 'video-suite': return <VideoSuite />;
-      case 'audio-suite': return <AudioSuite />;
-      case 'grounded-search': return <GroundedSearch />;
-      case 'media-analyzer': return <MediaAnalyzer />;
+      case 'chatbot': return <Chatbot />;
+      case 'quran-suite': return <QuranSuite />;
+      case 'geo-commander': return <GeoCommander />;
+      case 'marketing-maestro': return <MarketingMaestro />;
+      case 'self-promotion': return <SelfPromotionProtocol />;
+      case 'smart-editor': return <SmartEditor />;
+      case 'finance-manager': return <FinanceManager />;
+      case 'app-builder': return <AppBuilder />;
+      case 'global-ai-hub': return <GlobalAIHub />;
       default: return <Welcome />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-gray-950 text-gray-100 font-sans overflow-hidden">
-      <Sidebar onSelectFeature={handleSelectFeature} activeFeatureId={activeFeature?.id} />
-      <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gradient-to-br from-gray-900 to-black relative">
-        {/* Subtle Grid Background */}
-        <div className="absolute inset-0 opacity-5 grid-bg pointer-events-none"></div>
-        <div className="relative z-10">
-          {renderFeature()}
+    <div className="flex h-screen bg-[#020202] text-white font-sans overflow-hidden relative" dir="rtl">
+      <div className="fixed top-0 left-0 right-0 h-[2px] z-[120] bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.8)]"></div>
+      
+      {isMobileMenuOpen && (
+          <div onClick={() => setIsMobileMenuOpen(false)} className="fixed inset-0 bg-black/80 backdrop-blur-md z-[95] lg:hidden animate-fade-in"></div>
+      )}
+
+      <aside className={`
+        fixed inset-y-0 right-0 z-[100] transform lg:relative lg:translate-x-0 transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1)
+        ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+        w-72 md:w-80 h-full border-l border-white/5 bg-black
+      `}>
+        <Sidebar onSelectFeature={handleSelectFeature} activeFeatureId={activeFeature?.id} role={userRole} />
+      </aside>
+
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto bg-black relative custom-scrollbar">
+        <header className="sticky top-0 left-0 right-0 h-16 z-[90] glass-header flex justify-between items-center px-4 md:px-8">
+            <div className="flex items-center gap-4">
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 hover:bg-white/10 rounded-xl transition-all">
+                    {isMobileMenuOpen ? <XMarkIcon className="w-6 h-6 text-white" /> : <Bars3Icon className="w-6 h-6 text-white" />}
+                </button>
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-600 rounded-lg">
+                        <SignalIcon className="w-4 h-4 text-white animate-pulse" />
+                    </div>
+                    <div className="flex flex-col text-right">
+                      <span className="text-xs font-black tracking-widest uppercase italic leading-none">ZOOKA EMPIRE</span>
+                      <span className="text-[8px] text-blue-500 font-bold uppercase tracking-[0.2em] mt-1">{activeFeature?.name || 'اللوحة الرئيسية'}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
+                    <ShieldCheckIcon className="w-3.5 h-3.5 text-blue-500" />
+                    <span className="text-[9px] font-black uppercase text-blue-500">SECURE ZONE</span>
+                </div>
+                <div className="h-8 w-px bg-white/10 mx-2 hidden md:block"></div>
+                <div className="flex flex-col text-left">
+                  <div className="text-[10px] font-black text-white uppercase">{userRole === 'owner' ? 'إمبراطور' : 'عضو'}</div>
+                  <div className="text-[8px] text-gray-500 font-bold uppercase tracking-tighter">الحالة: متصل</div>
+                </div>
+            </div>
+        </header>
+
+        <div className="relative z-10 min-h-[calc(100vh-64px)] flex flex-col">
+            <div className="flex-1">
+              {renderFeature()}
+            </div>
+            
+            <footer className="p-8 mt-12 border-t border-white/5 bg-black/40 text-center">
+               <p className="text-[10px] text-gray-600 font-black uppercase tracking-[0.4em]">
+                 كيان سيادي بواسطة رويال هارون © 2025
+               </p>
+            </footer>
         </div>
       </main>
     </div>

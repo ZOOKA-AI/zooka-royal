@@ -1,18 +1,25 @@
+
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
+  // @ts-ignore
+  const env = loadEnv(mode, (process as any).cwd(), '');
   return {
     plugins: [react()],
     define: {
-      // Polyfill process.env for the Google GenAI SDK and your existing code
-      'process.env': env
+      'process.env': {
+        ...env,
+        API_KEY: env.API_KEY || (process.env.API_KEY || '')
+      }
     },
     server: {
-      host: true, // Listen on all addresses
+      host: '0.0.0.0',
       port: 8080,
+      strictPort: true,
+      hmr: {
+        clientPort: 443
+      }
     },
     build: {
       outDir: 'dist',
