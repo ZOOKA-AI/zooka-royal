@@ -30,7 +30,13 @@ export const GlobalAIHub: React.FC = () => {
     const fetchGlobalTools = async () => {
         setLoading(true);
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+            const apiKey = localStorage.getItem('GEMINI_API_KEY') || process.env.API_KEY;
+            if (!apiKey) {
+                console.error("API key not found");
+                setLoading(false);
+                return;
+            }
+            const ai = new GoogleGenAI({ apiKey });
             const prompt = `Generate a comprehensive directory of the top 20 AI tools/technologies in the world (OpenAI, Gemini, Midjourney, Anthropic, etc.) for marketing, automation, and engineering. 
             Format as JSON: [{"name": "", "category": "vision/logic/automation/audio", "description": "", "link": "", "impact": "High"}]`;
             
@@ -67,7 +73,7 @@ export const GlobalAIHub: React.FC = () => {
                             type="text" 
                             value={search}
                             onChange={e => setSearch(e.target.value)}
-                            className="w-full bg-black/60 border-2 border-gray-800 rounded-3xl px-12 py-5 text-white focus:border-blue-600 outline-none transition-all shadow-inner text-xl"
+                            className="w-full bg-black/60 border-2 border-gray-800 rounded-3xl px-12 py-5 text-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all shadow-inner text-xl"
                             placeholder="ابحث عن أداة، تقنية، أو بنية تحتية..."
                         />
                         <MagnifyingGlassIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-600 group-focus-within:text-blue-500 transition-colors" />

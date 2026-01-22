@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { 
@@ -17,6 +17,7 @@ const SmartEditor: React.FC = () => {
   const [outputText, setOutputText] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentAction, setCurrentAction] = useState<string>('');
+  const outputRef = useRef<HTMLDivElement>(null);
 
   const actions = [
     { id: 'structural_formwork', label: 'مخطط الشدة الهندسية', icon: <WrenchScrewdriverIcon className="w-5 h-5 text-yellow-400" />, prompt: "تصرف كمهندس مدني خبير ومدير مشروع. المهمة: إعداد خطة عمل وتقرير فني شامل لأعمال الشدة الخشبية والمعدنية (Formwork Method Statement). المطلوب: 1. التخطيط والتجهيز. 2. خطوات التنفيذ (تحطيط، تربيع، تقوية). 3. قائمة الاستلام (Inspection Checklist). 4. فك الشدة. استخدم المصطلحات الفنية (عرق، نهايز، برندات، تطبيق). البيانات المقدمة:" },
@@ -47,6 +48,46 @@ const SmartEditor: React.FC = () => {
     } finally {
       setLoading(false);
       setCurrentAction('');
+    }
+  };
+
+  const handlePrint = () => {
+    const contentToPrint = outputRef.current?.innerHTML;
+    if (!contentToPrint) return;
+
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>تقرير مُصدّر من ZOOKA OS</title>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+              body { 
+                font-family: 'Cairo', sans-serif; 
+                direction: rtl;
+                padding: 2rem;
+                background-color: white;
+                color: black;
+              }
+              p {
+                white-space: pre-wrap;
+                font-size: 1rem;
+                line-height: 1.8;
+              }
+            </style>
+          </head>
+          <body>
+            ${contentToPrint}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 250);
     }
   };
 
@@ -112,9 +153,17 @@ const SmartEditor: React.FC = () => {
                  <div className="flex gap-2">
                     <button 
                       onClick={() => navigator.clipboard.writeText(outputText)} 
-                      className="text-[10px] text-green-400 bg-green-900/30 px-3 py-1 rounded-full font-bold hover:bg-green-900/50 transition-colors"
+                      className="text-[10px] text-green-400 bg-green-900/30 px-3 py-1 rounded-full font-bold hover:bg-green-900/50 transition-colors flex items-center gap-1"
                     >
+                      <ClipboardDocumentCheckIcon className="w-3 h-3"/>
                       نسخ التقرير
+                    </button>
+                     <button 
+                      onClick={handlePrint} 
+                      className="text-[10px] text-blue-400 bg-blue-900/30 px-3 py-1 rounded-full font-bold hover:bg-blue-900/50 transition-colors flex items-center gap-1"
+                    >
+                      <DocumentArrowDownIcon className="w-3 h-3" />
+                      تصدير PDF
                     </button>
                  </div>
                )}
@@ -131,7 +180,7 @@ const SmartEditor: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="prose prose-invert prose-sm max-w-none">
+                  <div ref={outputRef} className="prose prose-invert prose-sm max-w-none">
                     <p className="whitespace-pre-wrap leading-[1.8] text-gray-200 font-medium">
                         {outputText || "أدخل المعطيات واضغط على 'مخطط الشدة' للحصول على تقرير كامل..."}
                     </p>

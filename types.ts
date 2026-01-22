@@ -1,7 +1,7 @@
 
 import { ReactNode } from 'react';
 
-export type FeatureCategory = 'free' | 'enterprise' | 'system' | 'hidden';
+export type FeatureCategory = 'core' | 'free' | 'enterprise' | 'system' | 'hidden';
 
 export interface Feature {
   id: string;
@@ -16,4 +16,4 @@ export interface ChatMessage {
   parts: { text: string }[];
 }
 
-export type UserRole = 'guest' | 'user' | 'owner';
+export type UserRole = 'owner';

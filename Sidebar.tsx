@@ -15,7 +15,16 @@ import {
   MegaphoneIcon,
   RectangleGroupIcon,
   BanknotesIcon,
-  SignalIcon
+  SignalIcon,
+  MagnifyingGlassIcon,
+  BriefcaseIcon,
+  BuildingOffice2Icon,
+  CloudIcon,
+  PhoneIcon,
+  WrenchScrewdriverIcon,
+  AcademicCapIcon,
+  CreditCardIcon,
+  ArrowUpOnSquareIcon
 } from '@heroicons/react/24/outline';
 import { Feature, UserRole } from './types';
 
@@ -25,7 +34,10 @@ interface SidebarProps {
   role: UserRole;
 }
 
-const SidebarFeatures: Feature[] = [
+export const SidebarFeatures: Feature[] = [
+  // Site 00: Sovereign Core
+  { id: 'wisdom-center', name: 'مركز الحكمة', icon: <AcademicCapIcon className="w-5 h-5 text-yellow-400" />, description: 'The Spiritual Core of AI', category: 'core' },
+
   // Site 01: Intelligence Center
   { id: 'chatbot', name: 'الوكيل التنفيذي', icon: <ChatBubbleLeftRightIcon className="w-5 h-5 text-cyan-400" />, description: 'AI Logic Core', category: 'free' },
   { id: 'global-ai-hub', name: 'محور الذكاء العالمي', icon: <RectangleGroupIcon className="w-5 h-5 text-purple-500" />, description: 'All AI Tools Worldwide', category: 'free' },
@@ -39,12 +51,21 @@ const SidebarFeatures: Feature[] = [
   { id: 'marketing-maestro', name: 'المايسترو التسويقي', icon: <RocketLaunchIcon className="w-5 h-5 text-orange-500" />, description: 'SEO Automation', category: 'enterprise' },
   { id: 'geo-commander', name: 'القائد الجغرافي', icon: <GlobeAltIcon className="w-5 h-5 text-blue-500" />, description: '3D Fleet Mastery', category: 'enterprise' },
   { id: 'finance-manager', name: 'المدير المالي', icon: <BanknotesIcon className="w-5 h-5 text-emerald-500" />, description: 'OCR Finance', category: 'enterprise' },
+  { id: 'agent-center', name: 'مركز الوكلاء', icon: <BriefcaseIcon className="w-5 h-5 text-yellow-500" />, description: 'Sales & Support AI', category: 'enterprise' },
+  { id: 'cloud-manager', name: 'إدارة السحابة', icon: <CloudIcon className="w-5 h-5 text-cyan-500" />, description: 'Domains & Hosting', category: 'enterprise' },
+  { id: 'cloud-billing-manager', name: 'مدير الفوترة السحابية', icon: <CreditCardIcon className="w-5 h-5 text-red-500" />, description: 'AI Financial Analysis', category: 'enterprise' },
 
   // Site 04: Engineering
   { id: 'app-builder', name: 'المهندس المعماري', icon: <CommandLineIcon className="w-5 h-5 text-blue-600" />, description: 'Software Build', category: 'enterprise' },
+  { id: 'vision-architect', name: 'المهندس البصري', icon: <BuildingOffice2Icon className="w-5 h-5 text-orange-600" />, description: '3D Site Scanning', category: 'enterprise' },
+  { id: 'code-fixer', name: 'المُصلح السيادي', icon: <WrenchScrewdriverIcon className="w-5 h-5 text-yellow-600" />, description: 'Code Auto-Correction', category: 'enterprise' },
   { id: 'self-promotion', name: 'بروتوكول النشر الذاتي', icon: <MegaphoneIcon className="w-5 h-5 text-yellow-500 animate-pulse" />, description: 'Growth Automation', category: 'enterprise' },
+  { id: 'sovereign-launchpad', name: 'منصة الإطلاق السيادية', icon: <ArrowUpOnSquareIcon className="w-5 h-5 text-teal-500" />, description: 'Firebase Deployment Diagnostics', category: 'enterprise' },
 
-  // Admin
+
+  // Admin / System
+  { id: 'system-scanner', name: 'فحص النظام', icon: <MagnifyingGlassIcon className="w-5 h-5 text-blue-400" />, description: 'Deep Diagnostic', category: 'system' },
+  { id: 'global-connect', name: 'الاتصال العالمي', icon: <PhoneIcon className="w-5 h-5 text-emerald-500" />, description: 'Live Gemini VoIP', category: 'system' },
   { id: 'admin-dashboard', name: 'غرفة التحكم (Admin)', icon: <ShieldCheckIcon className="w-5 h-5 text-red-600" />, description: 'Command & Control', category: 'system' },
   { id: 'settings', name: 'الخزنة السيادية', icon: <CircleStackIcon className="w-5 h-5 text-gray-500" />, description: 'Encryption Keys', category: 'system' },
 ];
@@ -63,13 +84,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onSelectFeature, activeFeature
     if (filterIds) filtered = filtered.filter(f => filterIds.includes(f.id));
     
     // Hide enterprise/system tools for normal users
-    if (!isAdmin && category !== 'free') return null;
+    if (!isAdmin && (category !== 'free' && category !== 'core')) return null;
     if (filtered.length === 0) return null;
     
     return (
       <div className="mb-10">
         <h3 className="px-6 text-[9px] font-black text-gray-600 uppercase tracking-[0.5em] mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span> {title}
+            <span className={`w-1.5 h-1.5 rounded-full ${category === 'core' ? 'bg-yellow-500' : 'bg-blue-600'}`}></span> {title}
         </h3>
         <div className="space-y-1">
           {filtered.map((feature) => (
@@ -101,10 +122,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onSelectFeature, activeFeature
       </div>
 
       <div className="flex-1 w-full overflow-y-auto custom-scrollbar p-6">
+          {renderGroup("النواة السيادية", "core")}
           {renderGroup("محور الذكاء", "free")}
           {renderGroup("الإنتاج السينمائي", "enterprise", ['image-suite', 'video-suite'])}
-          {renderGroup("السيادة التجارية", "enterprise", ['marketing-maestro', 'finance-manager', 'geo-commander'])}
-          {renderGroup("البناء الهندسي", "enterprise", ['app-builder', 'self-promotion'])}
+          {renderGroup("السيادة التجارية", "enterprise", ['marketing-maestro', 'finance-manager', 'geo-commander', 'agent-center', 'cloud-manager', 'cloud-billing-manager'])}
+          {renderGroup("البناء الهندسي", "enterprise", ['app-builder', 'self-promotion', 'vision-architect', 'code-fixer', 'sovereign-launchpad'])}
           {renderGroup("النظام السيادي", "system")}
           
           <div className="mt-8 border-t border-gray-900 pt-6 px-4 space-y-4">
@@ -113,7 +135,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onSelectFeature, activeFeature
                     <a key={i} href={s.url} target="_blank" className="text-gray-500 hover:text-blue-500 transition-colors p-2 bg-black rounded-xl border border-gray-800" title={s.name}>{s.icon}</a>
                 ))}
              </div>
-             <button onClick={() => onSelectFeature({id: 'logout', name: 'خروج', icon: null, description: '', category: 'hidden'})} className="w-full flex items-center p-5 rounded-3xl text-gray-600 hover:bg-red-900/20 hover:text-red-500 transition-all group border border-transparent hover:border-red-900/30">
+             <button onClick={() => onSelectFeature({id: 'logout', name: 'خروج', icon: <></>, description: '', category: 'hidden'})} className="w-full flex items-center p-5 rounded-3xl text-gray-600 hover:bg-red-900/20 hover:text-red-500 transition-all group border border-transparent hover:border-red-900/30">
                 <ArrowLeftOnRectangleIcon className="w-5 h-5 ml-4" />
                 <span className="font-black text-[12px] uppercase tracking-widest">إنهاء الجلسة</span>
               </button>

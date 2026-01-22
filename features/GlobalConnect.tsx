@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from "@google/genai";
 import { encode, decode, decodeAudioData } from '../utils';
@@ -71,7 +72,7 @@ const GlobalConnect: React.FC = () => {
 
             // Initialize Gemini Live Session
             sessionPromiseRef.current = ai.live.connect({
-                model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+                model: 'gemini-2.5-flash-native-audio-preview-12-2025',
                 config: {
                     responseModalities: [Modality.AUDIO], 
                     systemInstruction: `
@@ -259,7 +260,7 @@ const GlobalConnect: React.FC = () => {
                             placeholder="اسم المعرف (اختياري)" 
                             value={targetIdentity}
                             onChange={(e) => setTargetIdentity(e.target.value)}
-                            className="bg-gray-800 border border-gray-600 p-3 rounded-xl text-center text-white focus:border-emerald-500 outline-none"
+                            className="bg-gray-800 border border-gray-600 p-3 rounded-xl text-center text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors"
                         />
 
                         {/* Call Actions */}

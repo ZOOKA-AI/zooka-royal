@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 import { 
@@ -120,7 +121,7 @@ const Chatbot: React.FC = () => {
                 onChange={e => setInput(e.target.value)} 
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
                 placeholder="أدخل أمرك هنا..." 
-                className="flex-1 bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-white focus:border-green-500 outline-none"
+                className="flex-1 bg-gray-900 border border-gray-600 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-colors"
             />
             <button onClick={handleSend} disabled={loading} className="bg-green-600 p-3 rounded-xl hover:bg-green-500 text-white"><PaperAirplaneIcon className="w-6 h-6 transform rotate-180"/></button>
         </div>

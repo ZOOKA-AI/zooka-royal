@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -203,9 +204,9 @@ const VisionArchitect: React.FC = () => {
                         ) : (
                             <div className="relative rounded-xl overflow-hidden border border-gray-600">
                                 {file?.type.startsWith('video') ? (
-                                    <video src={preview} controls className="w-full h-64 object-cover" />
+                                    <video src={preview} controls preload="metadata" className="w-full h-64 object-cover" />
                                 ) : (
-                                    <img src={preview} alt="preview" className="w-full h-64 object-cover" />
+                                    <img src={preview} alt="preview" loading="lazy" className="w-full h-64 object-cover" />
                                 )}
                                 <button 
                                     onClick={() => {setFile(null); setPreview(null); setResult(null);}}

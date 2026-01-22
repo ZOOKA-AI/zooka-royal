@@ -1,31 +1,25 @@
 
 {
-  "name": "zooka-os-platform",
+  "name": "zooka-os-frontend",
   "private": true,
-  "version": "4.2.0",
+  "version": "7.8.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 8080 --host 0.0.0.0",
+    "dev": "vite",
     "build": "vite build",
-    "start": "node server.js",
-    "preview": "vite preview --port 8080 --host 0.0.0.0"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^0.2.1",
+    "@google/genai": "^1.38.0",
     "@heroicons/react": "^2.2.0",
-    "express": "^4.18.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
-    "@types/node": "^20.10.6",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.5.4",
+    "vite": "^7.3.1"
   }
 }

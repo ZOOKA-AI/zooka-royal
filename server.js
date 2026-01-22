@@ -18,10 +18,24 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+// System Status API
+app.get('/api/status', (req, res) => {
+  const uptimeInSeconds = process.uptime();
+  const status = {
+    status: 'Operational',
+    uptime: `${Math.floor(uptimeInSeconds)} seconds`,
+    timestamp: new Date().toISOString()
+  };
+  res.status(200).json(status);
+});
+
 // SPA Routing: Forward all non-file requests to index.html
+// Enhanced to decode URI components for Arabic paths
 app.get('*', (req, res) => {
+  const decodedPath = decodeURIComponent(req.path);
+  
   // If the request looks like a file (has an extension), don't send index.html
-  if (req.path.includes('.')) {
+  if (decodedPath.includes('.')) {
     res.status(404).end();
     return;
   }

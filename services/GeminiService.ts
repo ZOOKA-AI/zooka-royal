@@ -5,7 +5,7 @@ class GeminiService {
   private ai: GoogleGenAI | null = null;
 
   private init() {
-    const apiKey = process.env.API_KEY || localStorage.getItem('GEMINI_API_KEY');
+    const apiKey = localStorage.getItem('GEMINI_API_KEY') || process.env.API_KEY;
     if (apiKey) {
       this.ai = new GoogleGenAI({ apiKey });
     }

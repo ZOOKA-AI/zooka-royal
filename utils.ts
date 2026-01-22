@@ -14,36 +14,35 @@ export const blobToBase64 = (blob: Blob): Promise<string> => {
   });
 };
 
-// --- REAL ENCRYPTION UTILS ---
-// Simple XOR cipher + Base64 for client-side obfuscation until backend is connected.
-// This prevents plain-text reading from LocalStorage.
-const SECRET_SALT = "ZOOKA_ROYAL_CORE_X9";
+// --- SOVEREIGN ENCRYPTION UTILS V2 ---
+// Uses Base64 and string reversal for improved client-side obfuscation.
+const SECRET_SALT = "ZOOKA_OS_ENCRYPTION_KEY_v999";
 
 export function encryptData(text: string): string {
     if (!text) return '';
-    const textToChars = (text: string) => text.split('').map(c => c.charCodeAt(0));
-    const byteHex = (n: number) => ("0" + Number(n).toString(16)).substr(-2);
-    const applySaltToChar = (code: any) => textToChars(SECRET_SALT).reduce((a, b) => a ^ b, code);
-
-    return text
-        .split('')
-        .map(textToChars)
-        .map(applySaltToChar)
-        .map(byteHex)
-        .join('');
+    try {
+        return btoa(text + SECRET_SALT).split('').reverse().join('');
+    } catch (e) {
+        console.error("Encryption failed", e);
+        return '';
+    }
 }
 
 export function decryptData(encoded: string): string {
     if (!encoded) return '';
-    const textToChars = (text: string) => text.split('').map(c => c.charCodeAt(0));
-    const applySaltToChar = (code: any) => textToChars(SECRET_SALT).reduce((a, b) => a ^ b, code);
-    
-    return (encoded.match(/.{1,2}/g) || [])
-        .map(hex => parseInt(hex, 16))
-        .map(applySaltToChar)
-        .map(charCode => String.fromCharCode(charCode))
-        .join('');
+    try {
+        const reversed = encoded.split('').reverse().join('');
+        const decoded = atob(reversed);
+        if (decoded.endsWith(SECRET_SALT)) {
+            return decoded.slice(0, -SECRET_SALT.length);
+        }
+        return ''; // Invalid data if salt is missing
+    } catch (e) {
+        console.error("Decryption failed", e);
+        return '';
+    }
 }
+
 
 // Functions for Live API audio processing
 export function decode(base64: string): Uint8Array {

@@ -36,7 +36,13 @@ export const SelfPromotionProtocol: React.FC = () => {
         setLogs([]);
         addLog("بدء استدعاء محرك النمو السيادي...");
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+            const apiKey = localStorage.getItem('GEMINI_API_KEY') || process.env.API_KEY;
+            if (!apiKey) {
+                addLog("خطأ: مفتاح API مفقود. يرجى إعداده من الخزنة.");
+                setLoading(false);
+                return;
+            }
+            const ai = new GoogleGenAI({ apiKey });
             const prompt = `أنت مدير النمو في ZOOKA OS. قم بإنشاء خطة تسويقية وكود HTML لـ "صفحة هبوط" تروج لخدمات رويال كلين (Royal Clean). المطلوب: JSON { "plan": [], "keywords": [], "html": "" }`;
             
             const response = await ai.models.generateContent({

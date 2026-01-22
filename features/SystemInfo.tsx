@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { 
@@ -56,7 +57,9 @@ export const SystemInfo: React.FC<SystemInfoProps> = ({ onClose, initialTab = 'i
 
       try {
           const apiKey = localStorage.getItem('GEMINI_API_KEY') || process.env.API_KEY;
-          const ai = new GoogleGenAI({ apiKey: apiKey as string });
+          if (!apiKey) throw new Error("API key is missing.");
+          
+          const ai = new GoogleGenAI({ apiKey });
           const prompt = `
             You are the Official Guide and Sales Representative for "ZOOKA OS" (developed by Royal Haroun).
             

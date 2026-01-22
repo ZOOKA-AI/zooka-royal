@@ -6,16 +6,15 @@ import {
   ChartBarIcon, 
   UserGroupIcon, 
   BoltIcon, 
-  NoSymbolIcon,
   PowerIcon,
-  AdjustmentsHorizontalIcon,
   GlobeAltIcon,
   SignalIcon,
-  UserMinusIcon,
   BeakerIcon,
   LockClosedIcon,
   ChatBubbleBottomCenterTextIcon,
-  ArrowTopRightOnSquareIcon
+  ArrowTopRightOnSquareIcon,
+  CreditCardIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/solid';
 
 export const AdminDashboard: React.FC = () => {
@@ -67,10 +66,39 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {activeTab === 'stats' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in">
-          <StatCard label="المعالجة النشطة" value="98.2%" trend="+2%" color="red" />
-          <StatCard label="المشتركين الجدد" value="1,280" trend="+45" color="blue" />
-          <StatCard label="محاولات الاختراق" value="0" trend="CLEAN" color="green" />
+        <div className="space-y-8 animate-fade-in">
+          <div className="bg-red-900/40 border-2 border-red-500 rounded-[3rem] p-10 shadow-[0_0_60px_rgba(220,38,38,0.3)] animate-pulse-slow relative overflow-hidden">
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="shrink-0">
+                <ExclamationTriangleIcon className="w-24 h-24 text-red-500" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-3xl font-black text-white uppercase tracking-widest mb-4">تنبيه أمني-مالي حرج</h3>
+                <div className="space-y-3 bg-black/30 p-6 rounded-2xl border border-red-900/50">
+                  <p><strong className="text-white">الحساب:</strong> Firebase Payment</p>
+                  <p><strong className="text-white">الحالة:</strong> <span className="font-bold text-red-400">مغلق (CLOSED)</span></p>
+                  <p><strong className="text-white">إنفاق آخر 30 يوم:</strong> $59</p>
+                  <p className="text-white font-bold pt-3 border-t border-red-900/50 mt-3">التأثير المتوقع:</p>
+                  <ul className="list-disc list-inside text-sm text-red-300 space-y-1">
+                    <li>توقف الخدمات المعتمدة على هذا الحساب.</li>
+                    <li>حظر استدعاءات واجهات برمجة التطبيقات (API calls).</li>
+                    <li>فشل عمليات النشر والتحديث (Deployments).</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="self-center md:self-end">
+                <a href="https://console.cloud.google.com/billing" target="_blank" className="px-10 py-5 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black shadow-2xl transition-all flex items-center gap-3">
+                  <CreditCardIcon className="w-6 h-6"/> إدارة الفوترة
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <StatCard label="المعالجة النشطة" value="98.2%" trend="+2%" color="red" />
+            <StatCard label="المشتركين الجدد" value="1,280" trend="+45" color="blue" />
+            <StatCard label="محاولات الاختراق" value="0" trend="CLEAN" color="green" />
+          </div>
         </div>
       )}
 

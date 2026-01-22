@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -206,7 +207,7 @@ const AgentCenter: React.FC = () => {
                             value={customerMsg}
                             onChange={(e) => setCustomerMsg(e.target.value)}
                             placeholder="انسخ رسالة العميل هنا... (مثال: السلام عليكم، بكم سعر الاشتراك؟ وهل فيه خصم؟)"
-                            className="w-full h-32 p-3 bg-gray-800 border border-gray-600 rounded-xl focus:border-green-500 focus:ring-1 focus:ring-green-500 text-white resize-none"
+                            className="w-full h-32 p-3 bg-gray-800 border border-gray-600 rounded-xl focus:border-green-500 focus:ring-1 focus:ring-green-500 text-white resize-none outline-none"
                         />
                     </div>
                     <div>
@@ -280,7 +281,7 @@ const AgentCenter: React.FC = () => {
                             onChange={(e) => setProductQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleShoppingSearch()}
                             placeholder="ما الذي تريد شراءه؟ (مثال: لابتوب للألعاب)"
-                            className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:border-blue-500 text-white pl-12"
+                            className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white pl-12 outline-none"
                          />
                          <ShoppingCartIcon className="w-6 h-6 text-gray-500 absolute left-4 top-4" />
                      </div>

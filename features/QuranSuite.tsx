@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { gemini } from '../services/GeminiService';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { 
@@ -18,6 +18,7 @@ export const QuranSuite: React.FC = () => {
     const [chatHistory, setChatHistory] = useState<{role: 'user' | 'model', text: string}[]>([]);
     const [loading, setLoading] = useState(false);
     const [prayerTimes, setPrayerTimes] = useState<any>(null);
+    const [prayerTimesLoading, setPrayerTimesLoading] = useState(false);
     const [azanActive, setAzanActive] = useState(false);
     const azanAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -28,19 +29,7 @@ export const QuranSuite: React.FC = () => {
         { name: "عبد الباسط عبد الصمد", id: "basit", url: "" },
     ];
 
-    useEffect(() => {
-        // Auto-fetch prayer times on mount
-        fetchPrayerTimes();
-        
-        // Setup Azan check every minute
-        const interval = setInterval(() => {
-            checkAzanTime();
-        }, 60000);
-        
-        return () => clearInterval(interval);
-    }, [prayerTimes]);
-
-    const checkAzanTime = () => {
+    const checkAzanTime = useCallback(() => {
         if (!prayerTimes) return;
         const now = new Date();
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -52,7 +41,7 @@ export const QuranSuite: React.FC = () => {
                 break;
             }
         }
-    };
+    }, [prayerTimes, azanActive]);
 
     const playAzan = () => {
         setAzanActive(true);
@@ -62,6 +51,38 @@ export const QuranSuite: React.FC = () => {
         azanAudioRef.current.play();
         azanAudioRef.current.onended = () => setAzanActive(false);
     };
+
+    const fetchPrayerTimes = useCallback(() => {
+        setPrayerTimesLoading(true);
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=4`);
+                const data = await res.json();
+                setPrayerTimes(data.data.timings);
+            } catch (e) {
+                console.error("Failed to fetch prayer times");
+            } finally {
+                setPrayerTimesLoading(false);
+            }
+        }, (error) => {
+            console.error("Geolocation error:", error);
+            alert("فشل تحديد الموقع. يرجى السماح بالوصول إلى موقعك.");
+            setPrayerTimesLoading(false);
+        });
+    }, []);
+
+    useEffect(() => {
+        fetchPrayerTimes();
+    }, [fetchPrayerTimes]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            checkAzanTime();
+        }, 60000);
+        
+        return () => clearInterval(interval);
+    }, [checkAzanTime]);
+
 
     const handleChat = async () => {
         if (!chatInput.trim()) return;
@@ -79,18 +100,6 @@ export const QuranSuite: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const fetchPrayerTimes = () => {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            try {
-                const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=4`);
-                const data = await res.json();
-                setPrayerTimes(data.data.timings);
-            } catch (e) {
-                console.error("Failed to fetch prayer times");
-            }
-        });
     };
 
     return (
@@ -151,7 +160,7 @@ export const QuranSuite: React.FC = () => {
                                 value={chatInput}
                                 onChange={e => setChatInput(e.target.value)}
                                 onKeyDown={e => e.key === 'Enter' && handleChat()}
-                                className="flex-1 bg-emerald-900/30 border-2 border-emerald-800 rounded-[2.5rem] px-10 py-6 text-white outline-none focus:border-emerald-500 text-xl shadow-inner"
+                                className="flex-1 bg-emerald-900/30 border-2 border-emerald-800 rounded-[2.5rem] px-10 py-6 text-white outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 text-xl shadow-inner transition-colors"
                                 placeholder="اسأل عن آية، حديث، أو حكم شرعي..."
                             />
                             <button onClick={handleChat} disabled={loading} className="bg-emerald-600 hover:bg-emerald-500 px-14 rounded-[2.5rem] font-black text-xl text-white shadow-2xl transition-all active:scale-90">إرسال</button>
@@ -161,12 +170,17 @@ export const QuranSuite: React.FC = () => {
 
                 {activeTab === 'prayer' && (
                     <div className="flex flex-col items-center justify-center py-20 gap-16 text-center">
-                        {!prayerTimes ? (
+                        {!prayerTimes && !prayerTimesLoading ? (
                             <button onClick={fetchPrayerTimes} className="bg-emerald-600 px-16 py-6 rounded-[2.5rem] font-black text-xl flex items-center gap-6 mx-auto shadow-2xl hover:scale-110 transition-transform">
                                 <MapPinIcon className="w-10 h-10" /> تحديد المواقيت تلقائياً
                             </button>
+                        ) : prayerTimesLoading ? (
+                            <div className="flex flex-col items-center gap-6 text-emerald-400 animate-pulse">
+                                <LoadingSpinner />
+                                <span className="font-black text-xl">جاري تحديد موقعك...</span>
+                            </div>
                         ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 w-full">
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 w-full animate-fade-in">
                                 {['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].map(p => (
                                     <div key={p} className="bg-emerald-900/60 p-10 rounded-[3rem] border border-emerald-800 shadow-2xl group hover:border-emerald-500 transition-all hover:-translate-y-2">
                                         <div className="text-emerald-500 text-xs font-black uppercase mb-4 tracking-[0.3em]">{p === 'Fajr' ? 'الفجر' : p === 'Dhuhr' ? 'الظهر' : p === 'Asr' ? 'العصر' : p === 'Maghrib' ? 'المغرب' : 'العشاء'}</div>
