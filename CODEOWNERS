@@ -1,0 +1,7 @@
+# CODEOWNERS - Zooka Royal
+
+# Default owners for everything in the repo
+* @ZOOKA-AI
+
+# Documentation
+*.md @ZOOKA-AI
