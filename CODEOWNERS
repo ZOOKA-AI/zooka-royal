@@ -1,0 +1,8 @@
+# ZOOKA-AI Code Owners
+
+# Default owners for all files
+* @ZOOKA-AI
+
+# Project-specific owners (add as team grows)
+# /src/components/ @ZOOKA-AI/frontend-team
+# /src/api/ @ZOOKA-AI/backend-team
